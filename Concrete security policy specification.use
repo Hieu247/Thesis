@@ -1,0 +1,263 @@
+model ConcretePolicy
+
+-- classes
+
+class Role
+attributes
+  name : String
+  maxUsers : Integer
+  maxJuniors : Integer
+  maxSeniors : Integer
+end
+
+class User
+attributes
+  name : String
+  maxRoles : Integer
+  rolesHierarchy : Boolean
+end
+
+class Permission
+attributes
+  name : String
+  maxRoles : Integer
+  maxSessions : Integer
+end
+
+class Resource
+attributes
+  id : String
+end
+
+class Contract < Resource
+attributes
+  subjectName : String
+  department : String
+  class : String
+  startTime : String
+  endTime : String
+  contractValue : Real
+end
+
+class VisitingLecturer
+attributes
+  name : String
+  degree : String
+  experience : Integer
+  hasPedagogicalTrainingCertificate : Boolean
+  numberOfSignedContract : Integer
+end
+
+class Operation
+attributes
+  name : String
+end
+
+class Access
+attributes
+  name : String
+end
+
+class Session
+attributes
+  name : String
+end
+
+class Snapshot
+attributes
+  id : String
+  numberOfObjects : Integer
+  numberOfAssociationLinks : Integer
+end
+
+-- associations
+
+association UA between
+  User[*] role user
+  Role[*] role role_
+end
+
+association PA between
+  Permission[*] role permission
+  Role[*] role role_
+end
+
+association Approves between
+  Permission[1] role permission
+  Operation[1] role operation
+end
+
+association Performs between
+  Operation[1..*] role operation
+  Contract[1..*] role contract
+end
+
+association Establishes between
+  User[1] role user
+  Session[*] role session
+end
+
+association SnapshotUser between
+  User[*] role user
+  Snapshot[1] role snapshot
+end
+
+association Activates between
+  Session[*] role session
+  Role[*] role role_
+end
+
+association AccessOperation between
+  Operation[1] role operation
+  Access[*] role access
+end
+
+association AccessContract between
+  Access[*] role access
+  Contract[1] role contract
+end
+
+association RH between
+  Role[*] role senior
+  Role[*] role junior
+end
+
+association PrerequisitePermissions between
+  Permission[*] role dependent_permission
+  Permission[*] role required_permission
+end
+
+association PrerequisiteRoles between
+  Role[*] role dependent_role
+  Role[*] role required_role
+end
+
+aggregation ContractVisitingLecturer between
+  Contract[*] role contract
+  VisitingLecturer[1] role visitingLecturer
+end
+
+composition ActiveAccess between
+  Session[1] role session
+  Access[*] role access
+end
+
+-- OCL constraints
+
+constraints
+
+context User
+  inv PrerequisiteRoleDS:
+    self.role_->includes('Director')
+    implies self.role_->includes('StaffOfPlanningFinanceOffice')
+
+  inv PrerequisiteRoleDA:
+    self.role_->includes('Director')
+    implies self.role_->includes('AssistantOfAcademicAffairsOffice')
+
+  inv PrerequisiteRoleSA:
+    self.role_->includes('StaffOfPlanningFinanceOffice')
+    implies self.role_->includes('AssistantOfAcademicAffairsOffice')
+
+  inv SSoDforRH:
+    let 
+      Registrar:Role=Role.allInstances->any(name='Registrar'),
+      HeadOfDepartment:Role=Role.allInstances->any(name='HeadOfDepartment'),
+      CR:Set(Role)=Set{Registrar, HeadOfDepartment}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforRA:
+    let 
+      Registrar:Role=Role.allInstances->any(name='Registrar'),
+      AssistantOfAcademicAffairsOffice:Role=Role.allInstances->any(name='AssistantOfAcademicAffairsOffice'),
+      CR:Set(Role)=Set{Registrar, AssistantOfAcademicAffairsOffice}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforRS:
+    let 
+      Registrar:Role=Role.allInstances->any(name='Registrar'),
+      StaffOfPlanningFinanceOffice:Role=Role.allInstances->any(name='StaffOfPlanningFinanceOffice'),
+      CR:Set(Role)=Set{Registrar, StaffOfPlanningFinanceOffice}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforRD:
+    let 
+      Registrar:Role=Role.allInstances->any(name='Registrar'),
+      Director:Role=Role.allInstances->any(name='Director'),
+      CR:Set(Role)=Set{Registrar, Director}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforHA:
+    let 
+      HeadOfDepartment:Role=Role.allInstances->any(name='HeadOfDepartment'),
+      AssistantOfAcademicAffairsOffice:Role=Role.allInstances->any(name='AssistantOfAcademicAffairsOffice'),
+      CR:Set(Role)=Set{HeadOfDepartment, AssistantOfAcademicAffairsOffice}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforHS:
+    let 
+      HeadOfDepartment:Role=Role.allInstances->any(name='HeadOfDepartment'),
+      StaffOfPlanningFinanceOffice:Role=Role.allInstances->any(name='StaffOfPlanningFinanceOffice'),
+      CR:Set(Role)=Set{HeadOfDepartment, StaffOfPlanningFinanceOffice}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+
+  inv SSoDforHD:
+    let 
+      HeadOfDepartment:Role=Role.allInstances->any(name='HeadOfDepartment'),
+      Director:Role=Role.allInstances->any(name='Director'),
+      CR:Set(Role)=Set{HeadOfDepartment, Director}
+    in
+      self.role_->intersection(CR)->size() < CR->size()
+ 
+context Role 
+  inv MaximumNumberOfUsers:
+    self.maxUsers.isDefined
+    implies self.user->size() <= self.maxUsers
+
+  inv PrerequisitePermissionCR:
+    self.permission->includes('ContractChecking')
+    implies self.permission->includes('ContractReading')
+
+  inv PrerequisitePermissionRR:
+    self.permission->includes('ContractReview')
+    implies self.permission->includes('ContractReading')
+
+  inv PrerequisitePermissionSR:
+    self.permission->includes('NotificationSending')
+    implies self.permission->includes('ContractReading')
+
+  inv PrerequisitePermissionVRead:
+    self.permission->includes('ContractValidation')
+    implies self.permission->includes('ContractReading')
+
+  inv PrerequisitePermissionVReview:
+    self.permission->includes('ContractValidation')
+    implies self.permission->includes('ContractReview')
+
+  inv PrerequisitePermissionARead:
+    self.permission->includes('PaymentApproval')
+    implies self.permission->includes('ContractReading')
+
+  inv PrerequisitePermissionAV:
+    self.permission->includes('PaymentApproval')
+    implies self.permission->includes('ContractValidation')
+
+  inv PrerequisitePermissionAReview:
+    self.permission->includes('PaymentApproval')
+    implies self.permission->includes('ContractReview')
+
+context VisitingLecturer
+  inv MaximumNumberOfSignedContractInCurrentSemester:
+    self.numberOfSignedContract.isDefined
+    implies self.numberOfSignedContract <= 3
+
+context Contract
+  inv LecturerVisitingCriteria:
+    self.visitingLecturer->includes('Thac si')
+    implies self.visitingLecturer.experience >= 5 or self.visitingLecturer.hasPedagogicalTrainingCertificate = true
