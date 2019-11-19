@@ -1,0 +1,119 @@
+model RBACmetamodel
+
+-- classes
+
+class Role
+attributes
+  name : String
+  maxUsers : Integer
+  maxJuniors : Integer
+  maxSeniors : Integer
+end
+
+class User
+attributes
+  name : String
+  maxRoles : Integer
+  rolesHierarchy : Boolean
+end
+
+class Permission
+attributes
+  name : String
+  maxRoles : Integer
+  maxSessions : Integer
+end
+
+class Resource
+attributes
+  id : String
+end
+
+class Operation
+attributes
+  name : String
+end
+
+class Access
+attributes
+  name : String
+end
+
+class Session
+attributes
+  name : String
+end
+
+class Snapshot
+attributes
+  id : String
+  numberOfObjects : Integer
+  numberOfAssociationLinks : Integer
+end
+
+-- associations
+
+association UA between
+  User[*] role user
+  Role[*] role role_
+end
+
+association PA between
+  Permission[*] role permission
+  Role[*] role role_
+end
+
+association Approves between
+  Permission[1] role permission
+  Operation[1] role operation
+end
+
+association Performs between
+  Operation[1..*] role operation
+  Resource[1..*] role resource
+end
+
+association Establishes between
+  User[1] role user
+  Session[*] role session
+end
+
+association SnapshotUser between
+  User[*] role user
+  Snapshot[1] role snapshot
+end
+
+association Activates between
+  Session[*] role session
+  Role[*] role role_
+end
+
+association AccessOperation between
+  Operation[1] role operation
+  Access[*] role access
+end
+
+association AccessResource between
+  Access[*] role access
+  Resource[1] role resource
+end
+
+association RH between
+  Role[*] role senior
+  Role[*] role junior
+end
+
+association PrerequisitePermissions between
+  Permission[*] role dependent_permission
+  Permission[*] role required_permission
+end
+
+association PrerequisiteRoles between
+  Role[*] role dependent_role
+  Role[*] role required_role
+end
+
+composition ActiveAccess between
+  Session[1] role session
+  Access[*] role access
+end
