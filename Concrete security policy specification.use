@@ -215,11 +215,7 @@ context User
     in
       self.role_->intersection(CR)->size() < CR->size()
  
-context Role 
-  inv MaximumNumberOfUsers:
-    self.maxUsers.isDefined
-    implies self.user->size() <= self.maxUsers
-
+context Role
   inv PrerequisitePermissionCR:
     self.permission->includes('ContractChecking')
     implies self.permission->includes('ContractReading')
