@@ -1,0 +1,394 @@
+package ndhieu.thesis.activiti.businessprocess.use.testcases;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class CreateVisitingLecturerContractLiquidationProcessTC1 {
+
+	private static Connection connection = JDBCConnection.getJDBCConnection();
+
+	private ResultSet getProcessInfo(String procID, String assigneeName) {
+
+		ResultSet rs = null;
+		PreparedStatement preparedStatement = null;
+
+		String sql = "SELECT * FROM activiti.act_hi_actinst WHERE PROC_DEF_ID_ LIKE ? AND ASSIGNEE_ = ? LIMIT 1";
+
+		try {
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, procID);
+			preparedStatement.setString(2, assigneeName);
+
+			rs = preparedStatement.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return rs;
+	}
+
+	public static void main(String[] args) throws IOException, SQLException {
+
+		ResultSet result = null;
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
+		ResultSet rs4 = null;
+		ResultSet rs5 = null;
+		ResultSet rs6 = null;
+		ResultSet rs7 = null;
+		ResultSet rs8 = null;
+		ResultSet rs9 = null;
+		ResultSet rs10 = null;
+		ResultSet rs12 = null;
+
+		CreateVisitingLecturerContractLiquidationProcessTC1 tc1 = new CreateVisitingLecturerContractLiquidationProcessTC1();
+		result = tc1.getProcessInfo(
+				"visitingLecturerContractLiquidationProcess%", "thuan");
+
+		String sql1 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'teachingContractNo' AND EXECUTION_ID_ = 91114";
+		String sql2 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'subjectName' AND EXECUTION_ID_ = 91114";
+		String sql3 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'department' AND EXECUTION_ID_ = 91114";
+		String sql4 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'class' AND EXECUTION_ID_ = 91114";
+		String sql5 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'startTime' AND EXECUTION_ID_ = 91114";
+		String sql6 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'endTime' AND EXECUTION_ID_ = 91114";
+		String sql7 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'contractValue' AND EXECUTION_ID_ = 91114";
+		String sql8 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'visitingLecturerName' AND EXECUTION_ID_ = 91114";
+		String sql9 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'degree' AND EXECUTION_ID_ = 91114";
+		String sql10 = "SELECT * FROM activiti.act_hi_varinst WHERE NAME_ = 'experience' AND EXECUTION_ID_ = 91114";
+		String sql12 = "SELECT count(*) FROM activiti.act_hi_varinst WHERE NAME_ = 'visitingLecturerName' AND TEXT_ = 'Le Ba Cuong'";
+
+		try {
+			Statement statement1 = connection.createStatement();
+			rs1 = statement1.executeQuery(sql1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement2 = connection.createStatement();
+			rs2 = statement2.executeQuery(sql2);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement3 = connection.createStatement();
+			rs3 = statement3.executeQuery(sql3);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement4 = connection.createStatement();
+			rs4 = statement4.executeQuery(sql4);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement5 = connection.createStatement();
+			rs5 = statement5.executeQuery(sql5);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement6 = connection.createStatement();
+			rs6 = statement6.executeQuery(sql6);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement7 = connection.createStatement();
+			rs7 = statement7.executeQuery(sql7);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			Statement statement8 = connection.createStatement();
+			rs8 = statement8.executeQuery(sql8);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			Statement statement9 = connection.createStatement();
+			rs9 = statement9.executeQuery(sql9);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			Statement statement10 = connection.createStatement();
+			rs10 = statement10.executeQuery(sql10);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			Statement statement12 = connection.createStatement();
+			rs12 = statement12.executeQuery(sql12);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		File file = new File(
+				"SecurityPolicyComplianceVerifyTC1.soil");
+
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file);
+		BufferedWriter bw = new BufferedWriter(fw);
+		PrintWriter pw = new PrintWriter(bw);
+
+		pw.println("-- Script generated by USE 5.1.0");
+		pw.println();
+
+		pw.println("!new Role('r1')");
+		pw.println("!r1.name := 'HeadOfDepartment'");
+		pw.println("!r1.maxUsers := 2");
+		pw.println("!r1.maxJuniors := 0");
+		pw.println("!r1.maxSeniors := 0");
+		pw.println("!new Role('r2')");
+		pw.println("!r2.name := 'AssistantOfAcademicAffairsOffice'");
+		pw.println("!r2.maxUsers := 1");
+		pw.println("!r2.maxJuniors := 0");
+		pw.println("!r2.maxSeniors := 2");
+		pw.println("!new Role('r3')");
+		pw.println("!r3.name := 'StaffOfPlanningFinanceOffice'");
+		pw.println("!r3.maxUsers := 2");
+		pw.println("!r3.maxJuniors := 1");
+		pw.println("!r3.maxSeniors := 1");
+		pw.println("!new Role('r4')");
+		pw.println("!r4.name := 'Director'");
+		pw.println("!r4.maxUsers := 1");
+		pw.println("!r4.maxJuniors := 2");
+		pw.println("!r4.maxSeniors := 0");
+
+		pw.println("!new User('u1')");
+		pw.println("!u1.name := 'Thuan'");
+		pw.println("!u1.maxRoles := 1");
+		pw.println("!u1.rolesHierarchy := false");
+		pw.println("!new User('u2')");
+		pw.println("!u2.name := 'Hanh'");
+		pw.println("!u2.maxRoles := 1");
+		pw.println("!u2.rolesHierarchy := false");
+		pw.println("!new User('u3')");
+		pw.println("!u3.name := 'Vinh'");
+		pw.println("!u3.maxRoles := 2");
+		pw.println("!u3.rolesHierarchy := true");
+		pw.println("!new User('u4')");
+		pw.println("!u4.name := 'Hieu'");
+		pw.println("!u4.maxRoles := 3");
+		pw.println("!u4.rolesHierarchy := true");
+
+		pw.println("!new Permission('p11')");
+		pw.println("!p11.name := 'ContractReading'");
+		pw.println("!p11.maxRoles := 4");
+		pw.println("!p11.maxSessions := 6");
+		pw.println("!new Permission('p12')");
+		pw.println("!p12.name := 'ContractChecking'");
+		pw.println("!p12.maxRoles := 1");
+		pw.println("!p12.maxSessions := 2");
+		pw.println("!new Permission('p21')");
+		pw.println("!p21.name := 'ContractReview'");
+		pw.println("!p21.maxRoles := 3");
+		pw.println("!p21.maxSessions := 4");
+		pw.println("!new Permission('p22')");
+		pw.println("!p22.name := 'NotificationSending'");
+		pw.println("!p22.maxRoles := 3");
+		pw.println("!p22.maxSessions := 4");
+		pw.println("!new Permission('p3')");
+		pw.println("!p3.name := 'ContractValidation'");
+		pw.println("!p3.maxRoles := 2");
+		pw.println("!p3.maxSessions := 3");
+		pw.println("!new Permission('p4')");
+		pw.println("!p4.name := 'PaymentApproval'");
+		pw.println("!p4.maxRoles := 1");
+		pw.println("!p4.maxSessions := 1");
+
+		pw.println("!new Operation('op11')");
+		pw.println("!op11.name := 'read'");
+		pw.println("!new Operation('op12')");
+		pw.println("!op12.name := 'check'");
+		pw.println("!new Operation('op21')");
+		pw.println("!op21.name := 'review'");
+		pw.println("!new Operation('op22')");
+		pw.println("!op22.name := 'sendNotification'");
+		pw.println("!new Operation('op3')");
+		pw.println("!op3.name := 'validate'");
+		pw.println("!new Operation('op4')");
+		pw.println("!op4.name := 'approve'");
+
+		pw.println("!new Resource('re1')");
+		while (rs1.next()) {
+			pw.println("!re1.id := '" + rs1.getString("TEXT_") + "'");
+		}
+		pw.println("!new Contract('con1')");
+		while (rs2.next()) {
+			pw.println("!con1.subjectName := '" + rs2.getString("TEXT_") + "'");
+		}
+		while (rs3.next()) {
+			pw.println("!con1.department := '" + rs3.getString("TEXT_") + "'");
+		}
+		while (rs4.next()) {
+			pw.println("!con1.class := '" + rs4.getString("TEXT_") + "'");
+		}
+		while (rs5.next()) {
+			pw.println("!con1.startTime := '" + rs5.getString("TEXT_") + "'");
+		}
+		while (rs6.next()) {
+			pw.println("!con1.endTime := '" + rs6.getString("TEXT_") + "'");
+		}
+		while (rs7.next()) {
+			pw.println("!con1.contractValue := " + rs7.getString("TEXT_"));
+		}
+		
+		pw.println("!new VisitingLecturer('lec1')");
+		while (rs8.next()) {
+			pw.println("!lec1.name := '" + rs8.getString("TEXT_") + "'");
+		}
+		while (rs9.next()) {
+			pw.println("!lec1.degree := '" + rs9.getString("TEXT_") + "'");
+		}
+		while (rs10.next()) {
+			pw.println("!lec1.experience := " + rs10.getLong("LONG_"));
+		}
+		pw.println("!lec1.hasPedagogicalTrainingCertificate := true");
+		while (rs12.next()) {
+			pw.println("!lec1.numberOfSignedContract := " + rs12.getLong("count(*)"));
+		}
+		
+		pw.println("!new Access('acc11')");
+		pw.println("!acc11.name := 'readAcc'");
+		pw.println("!new Access('acc12')");
+		pw.println("!acc12.name := 'checkAcc'");
+		pw.println("!new Access('acc21')");
+		pw.println("!acc21.name := 'reviewAcc'");
+		pw.println("!new Access('acc22')");
+		pw.println("!acc22.name := 'sendAcc'");
+		pw.println("!new Access('acc3')");
+		pw.println("!acc3.name := 'validateAcc'");
+		pw.println("!new Access('acc4')");
+		pw.println("!acc4.name := 'approveAcc'");
+
+		pw.println("!new Session('s1')");
+		pw.println("!s1.name := 'thuanS'");
+		pw.println("!new Session('s2')");
+		pw.println("!s2.name := 'hanhS'");
+		pw.println("!new Session('s3')");
+		pw.println("!s3.name := 'vinhS'");
+		pw.println("!new Session('s4')");
+		pw.println("!s4.name := 'hieuS'");
+
+		pw.println("!new Snapshot('snap1')");
+		while (result.next()) {
+			pw.println("!snap1.id := '" + result.getString(2) + "'");
+		}
+		pw.println("!snap1.numberOfObjects := 34");
+		pw.println("!snap1.numberOfAssociationLinks := 70");
+
+		pw.println("!insert (u1,r1) into UA");
+		pw.println("!insert (p11,r1) into PA");
+		pw.println("!insert (p12,r1) into PA");
+		pw.println("!insert (u1,s1) into Establishes");
+		pw.println("!insert (s1,r1) into Activates");
+		pw.println("!insert (p12,p11) into PrerequisitePermissions");
+		
+		pw.println("!insert (p11,op11) into Approves");
+		pw.println("!insert (p12,op12) into Approves");
+		pw.println("!insert (p21,op21) into Approves");
+		pw.println("!insert (p22,op22) into Approves");
+		pw.println("!insert (p3,op3) into Approves");
+		pw.println("!insert (p4,op4) into Approves");
+		
+		pw.println("!insert (re1,con1) into ResourceContract");
+
+		pw.println("!insert (u2,r2) into UA");
+		pw.println("!insert (p21,r2) into PA");
+		pw.println("!insert (p22,r2) into PA");
+		pw.println("!insert (p11,r2) into PA");
+		pw.println("!insert (u2,s2) into Establishes");
+		pw.println("!insert (s2,r2) into Activates");
+		pw.println("!insert (p21,p11) into PrerequisitePermissions");
+		pw.println("!insert (p22,p11) into PrerequisitePermissions");
+
+		pw.println("!insert (u3,r3) into UA");
+		pw.println("!insert (p3,r3) into PA");
+		pw.println("!insert (p21,r3) into PA");
+		pw.println("!insert (p22,r3) into PA");
+		pw.println("!insert (p11,r3) into PA");
+		pw.println("!insert (u3,s3) into Establishes");
+		pw.println("!insert (s3,r3) into Activates");
+		pw.println("!insert (p3,p11) into PrerequisitePermissions");
+		pw.println("!insert (p3,p21) into PrerequisitePermissions");
+
+		pw.println("!insert (u4,r4) into UA");
+		pw.println("!insert (p4,r4) into PA");
+		pw.println("!insert (p3,r4) into PA");
+		pw.println("!insert (p21,r4) into PA");
+		pw.println("!insert (p22,r4) into PA");
+		pw.println("!insert (p11,r4) into PA");
+		pw.println("!insert (u4,s4) into Establishes");
+		pw.println("!insert (s4,r4) into Activates");
+		pw.println("!insert (p4,p11) into PrerequisitePermissions");
+		pw.println("!insert (p4,p3) into PrerequisitePermissions");
+		pw.println("!insert (p4,p21) into PrerequisitePermissions");
+		
+		pw.println("!insert (u1,snap1) into SnapshotUser");
+		pw.println("!insert (u2,snap1) into SnapshotUser");
+		pw.println("!insert (u3,snap1) into SnapshotUser");
+		pw.println("!insert (u4,snap1) into SnapshotUser");
+		
+		pw.println("!insert (op11,acc11) into AccessOperation");
+		pw.println("!insert (op12,acc12) into AccessOperation");
+		pw.println("!insert (op21,acc21) into AccessOperation");
+		pw.println("!insert (op22,acc22) into AccessOperation");
+		pw.println("!insert (op3,acc3) into AccessOperation");
+		pw.println("!insert (op4,acc4) into AccessOperation");
+		
+		pw.println("!insert (acc11,con1) into AccessContract");
+		pw.println("!insert (acc12,con1) into AccessContract");
+		pw.println("!insert (acc21,con1) into AccessContract");
+		pw.println("!insert (acc22,con1) into AccessContract");
+		pw.println("!insert (acc3,con1) into AccessContract");
+		pw.println("!insert (acc4,con1) into AccessContract");
+		
+		pw.println("!insert (s1,acc11) into ActiveAccess");
+		pw.println("!insert (s1,acc12) into ActiveAccess");
+		pw.println("!insert (s2,acc11) into ActiveAccess");
+		pw.println("!insert (s2,acc21) into ActiveAccess");
+		pw.println("!insert (s2,acc22) into ActiveAccess");
+		pw.println("!insert (s3,acc11) into ActiveAccess");
+		pw.println("!insert (s3,acc22) into ActiveAccess");
+		pw.println("!insert (s3,acc3) into ActiveAccess");
+		pw.println("!insert (s4,acc11) into ActiveAccess");
+		pw.println("!insert (s4,acc22) into ActiveAccess");
+		pw.println("!insert (s4,acc4) into ActiveAccess");
+
+		pw.println("!insert (r3,r2) into RH");
+		pw.println("!insert (r4,r3) into RH");
+		
+		pw.println("!insert (con1,lec1) into ContractVisitingLecturer");
+
+		pw.close();
+		bw.close();
+		fw.close();
+	}
+
+}
